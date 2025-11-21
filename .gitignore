@@ -1,0 +1,146 @@
+##############################
+# GLOBAL IGNORE
+##############################
+.DS_Store
+Thumbs.db
+*.log
+logs/
+*.tmp
+*.swp
+*.swo
+
+##############################
+# PYTHON
+##############################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+develop-eggs/
+.installed.cfg
+*.manifest
+*.spec
+
+# venvs
+venv/
+env/
+.venv/
+ENV/
+
+##############################
+# DJANGO
+##############################
+# SQLite DB
+db.sqlite3
+db.sqlite3-journal
+
+# Django static & media (generated)
+staticfiles/
+media/
+
+# Migrations cache (optional but nice)
+*/migrations/__pycache__/
+# (Keep migration files themselves)
+
+##############################
+# NODE / JAVASCRIPT / TYPESCRIPT
+##############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Build outputs (Vite, React, etc.)
+dist/
+build/
+.cache/
+.next/
+out/
+coverage/
+.vscode/*.* (if you want to ignore vscode workspace files)
+
+##############################
+# FRONTEND TOOLS
+##############################
+# Babel / Parcel / Webpack
+.cache/
+.parcel-cache/
+webpack-stats.json
+
+# Vite
+vite.svg
+
+##############################
+# C++ / SDL3
+##############################
+# Build files
+*.o
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# SDL3 libs (optional)
+SDL3/build/
+SDL3/bin/
+SDL3/lib/
+
+# CLion / VSCode build junk
+cmake-build-debug/
+cmake-build-release/
+.idea/
+.vscode/
+
+##############################
+# EDITOR / OS STUFF
+##############################
+.vscode/
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+##############################
+# ENV / SECRETS
+##############################
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+**/.env
+
+##############################
+# OTHER
+##############################
+# JetBrains
+*.iws
+out/
+
+# Python notebooks checkpoints
+.ipynb_checkpoints/
+
+# SQLite backups
+*.sqlite3
+*.db
+*.bak
