@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import TextAreas from "./components/TextAreas";
 import Controls from "./components/Controls";
 import Metrics from "./components/Metrics";
@@ -31,45 +31,45 @@ async function runWithTimer(fn) {
  return res;
 }
 
-async function handleCompress() {
- setBusy(true);
- setStatus("");
- try {
-   const res = await runWithTimer(async () => {
-     return await compressRemote(input);
-   });
+  async function handleCompress() {
+    setBusy(true);
+    setStatus("");
+    try {
+      const res = await runWithTimer(async () => {
+        return await compressRemote(input);
+      });
 
-   setOutput(res);
-   setStatus("Compresie reușită.");
-   setStatusKind("success");
- } catch (e) {
-   setOutput("");
-   setStatus(e.message || "Eroare la compresie.");
-   setStatusKind("error");
- } finally {
-   setBusy(false);
- }
-}
+      setOutput(res);
+      setStatus("Compression successful.");
+      setStatusKind("success");
+    } catch (e) {
+      setOutput("");
+      setStatus(e.message || "Error during compression.");
+      setStatusKind("error");
+    } finally {
+      setBusy(false);
+    }
+  }
 
-async function handleDecompress() {
- setBusy(true);
- setStatus("");
- try {
-   const res = await runWithTimer(async () => {
-     return await decompressRemote(input);
-   });
+  async function handleDecompress() {
+    setBusy(true);
+    setStatus("");
+    try {
+      const res = await runWithTimer(async () => {
+        return await decompressRemote(input);
+      });
 
-   setOutput(res);
-   setStatus("Decompresie reușită.");
-   setStatusKind("success");
- } catch (e) {
-   setOutput("");
-   setStatus(e.message || "Eroare la decompresie.");
-   setStatusKind("error");
- } finally {
-   setBusy(false);
- }
-}
+      setOutput(res);
+      setStatus("Decompression successful.");
+      setStatusKind("success");
+    } catch (e) {
+      setOutput("");
+      setStatus(e.message || "Error during decompression.");
+      setStatusKind("error");
+    } finally {
+      setBusy(false);
+    }
+  }
 
 function handleClear() {
  setInput("");
@@ -78,12 +78,12 @@ function handleClear() {
  setTimeMs(null);
 }
 
-return (
- <div className="app">
-   <header className="header">
-     <h1>RLE Text Utility</h1>
-     <p>Compresie / Decompresie Run-Length Encoding</p>
-   </header>
+  return (
+    <div className="app">
+      <header className="header">
+        <h1>RLE Text Utility</h1>
+        <p>Compression / Decompression Run-Length Encoding</p>
+      </header>
 
    <FileDropZone onTextLoaded={(text) => setInput(text)} />
 
@@ -103,7 +103,7 @@ return (
      timeMs={timeMs}
    />
 
-   <StatusBar status={status} kind={statusKind} />
- </div>
-);
+      <StatusBar status={status} kind={statusKind} />
+    </div>
+  );
 }

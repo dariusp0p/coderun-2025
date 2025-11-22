@@ -1,6 +1,13 @@
+/* General Reset and Base Styles */
 * { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #0b0c10; color: #eee; }
+body { 
+  margin: 0; 
+  font-family: system-ui, Arial, sans-serif; 
+  background: #0b0c10; 
+  color: #eee; 
+}
 
+/* App Container */
 .app {
   max-width: 1000px;
   margin: 0 auto;
@@ -10,19 +17,33 @@ body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #0b0c10
   gap: 16px;
 }
 
-.header h1 { margin: 0 0 4px; }
-.header p { margin: 0; opacity: 0.8; }
+/* Header Styles */
+.header h1 { 
+  margin: 0 0 4px; 
+}
+.header p { 
+  margin: 0; 
+  opacity: 0.8; 
+}
 
+/* Grid Layout for Panels */
 .grid {
   display: grid;
   gap: 16px;
   grid-template-columns: 1fr 1fr;
 }
 @media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; }
+  .grid { 
+    grid-template-columns: 1fr; 
+  }
 }
 
-.panel label { display: block; margin-bottom: 6px; font-weight: 600; }
+/* Panel and Textarea Styles */
+.panel label { 
+  display: block; 
+  margin-bottom: 6px; 
+  font-weight: 600; 
+}
 textarea {
   width: 100%;
   resize: vertical;
@@ -35,6 +56,7 @@ textarea {
   line-height: 1.4;
 }
 
+/* Controls Section */
 .controls {
   display: flex;
   gap: 10px;
@@ -49,16 +71,24 @@ button {
   font-weight: 600;
   cursor: pointer;
 }
-button.secondary { background: #2d2f3a; }
-button:disabled { opacity: 0.6; cursor: not-allowed; }
+button.secondary { 
+  background: #2d2f3a; 
+}
+button:disabled { 
+  opacity: 0.6; 
+  cursor: not-allowed; 
+}
 
+/* Metrics Section */
 .metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 @media (max-width: 900px) {
-  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .metrics { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
 }
 .metric {
   background: #15161b;
@@ -66,18 +96,33 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border-radius: 12px;
   padding: 12px;
 }
-.metric-title { opacity: 0.75; font-size: 13px; margin-bottom: 6px; }
-.metric-val { font-size: 18px; font-weight: 700; }
+.metric-title { 
+  opacity: 0.75; 
+  font-size: 13px; 
+  margin-bottom: 6px; 
+}
+.metric-val { 
+  font-size: 18px; 
+  font-weight: 700; 
+}
 
+/* Status Bar Styles */
 .status {
   padding: 10px 12px;
   border-radius: 10px;
   font-weight: 600;
 }
-.status.info { background: #1f2937; }
-.status.success { background: #064e3b; }
-.status.error { background: #7f1d1d; }
+.status.info { 
+  background: #1f2937; 
+}
+.status.success { 
+  background: #064e3b; 
+}
+.status.error { 
+  background: #7f1d1d; 
+}
 
+/* File Drop Zone Styles */
 .dropzone {
   border: 2px dashed #2e2f36;
   background: #0f1116;
@@ -91,5 +136,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border-color: #4f46e5;
   background: #151827;
 }
-.drop-title { font-weight: 700; }
-.drop-sub { opacity: 0.8; font-size: 14px; margin-top: 4px; }
+.drop-title { 
+  font-weight: 700; 
+}
+.drop-sub { 
+  opacity: 0.8; 
+  font-size: 14px; 
+  margin-top: 4px; 
+}

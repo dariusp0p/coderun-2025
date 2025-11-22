@@ -7,7 +7,7 @@ export default function FileDropZone({ onTextLoaded }) {
   function readFile(file) {
     if (!file) return;
     if (!file.type.startsWith("text/") && !file.name.endsWith(".txt")) {
-      alert("Te rog încarcă un fișier text (.txt).");
+      alert("Please upload a text file (.txt).");
       return;
     }
 
@@ -39,8 +39,8 @@ export default function FileDropZone({ onTextLoaded }) {
         onChange={(e) => readFile(e.target.files?.[0])}
       />
       <div className="dropzone-inner">
-        <div className="drop-title">Drag & drop fișier aici</div>
-        <div className="drop-sub">sau click pentru upload</div>
+        <div className="drop-title">Drag & drop file here</div>
+        <div className="drop-sub">or click to upload</div>
       </div>
     </div>
   );

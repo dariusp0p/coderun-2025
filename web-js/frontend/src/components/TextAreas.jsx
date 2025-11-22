@@ -8,7 +8,7 @@ export default function TextAreas({ input, output, onInputChange }) {
         <textarea
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
-          placeholder="Scrie aici sau încarcă un fișier..."
+          placeholder="Write here or upload a file..."
           rows={10}
         />
       </div>
@@ -18,7 +18,7 @@ export default function TextAreas({ input, output, onInputChange }) {
         <textarea
           value={output}
           readOnly
-          placeholder="Rezultatul va apărea aici..."
+          placeholder="The result will appear here..."
           rows={10}
         />
       </div>
