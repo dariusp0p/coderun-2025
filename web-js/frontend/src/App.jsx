@@ -1,35 +1,118 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useMemo, useState } from "react";
+import TextAreas from "./components/TextAreas";
+import Controls from "./components/Controls";
+import Metrics from "./components/Metrics";
+import FileDropZone from "./components/FileDropZone";
+import StatusBar from "./components/StatusBar";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { compressRLE, decompressRLE } from "./utils/rle";
+// import { compressRemote, decompressRemote } from "./services/api";
+
+export default function App() {
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [status, setStatus] = useState("");
+  const [statusKind, setStatusKind] = useState("info");
+  const [timeMs, setTimeMs] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  const inputLen = useMemo(() => Array.from(input).length, [input]);
+  const outputLen = useMemo(() => Array.from(output).length, [output]);
+
+  const ratio = useMemo(() => {
+    if (inputLen === 0) return NaN;
+    return outputLen / inputLen;
+  }, [inputLen, outputLen]);
+
+  async function runWithTimer(fn) {
+    const t0 = performance.now();
+    const res = await fn();
+    const t1 = performance.now();
+    setTimeMs(t1 - t0);
+    return res;
+  }
+
+  async function handleCompress() {
+    setBusy(true);
+    setStatus("");
+    try {
+      const res = await runWithTimer(async () => {
+        // varianta locală:
+        return compressRLE(input);
+
+        // varianta backend:
+        // return await compressRemote(input);
+      });
+
+      setOutput(res);
+      setStatus("Compresie reușită.");
+      setStatusKind("success");
+    } catch (e) {
+      setOutput("");
+      setStatus(e.message || "Eroare la compresie.");
+      setStatusKind("error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleDecompress() {
+    setBusy(true);
+    setStatus("");
+    try {
+      const res = await runWithTimer(async () => {
+        // varianta locală:
+        return decompressRLE(input);
+
+        // varianta backend:
+        // return await decompressRemote(input);
+      });
+
+      setOutput(res);
+      setStatus("Decompresie reușită.");
+      setStatusKind("success");
+    } catch (e) {
+      setOutput("");
+      setStatus(e.message || "Eroare în format / decompresie.");
+      setStatusKind("error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function handleClear() {
+    setInput("");
+    setOutput("");
+    setStatus("");
+    setTimeMs(null);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="app">
+      <header className="header">
+        <h1>RLE Text Utility</h1>
+        <p>Compresie / Decompresie Run-Length Encoding</p>
+      </header>
 
-export default App
+      <FileDropZone onTextLoaded={(text) => setInput(text)} />
+
+      <TextAreas input={input} output={output} onInputChange={setInput} />
+
+      <Controls
+        onCompress={handleCompress}
+        onDecompress={handleDecompress}
+        onClear={handleClear}
+        busy={busy}
+      />
+
+      <Metrics
+        inputLen={inputLen}
+        outputLen={outputLen}
+        ratio={ratio}
+        timeMs={timeMs}
+      />
+
+      <StatusBar status={status} kind={statusKind} />
+    </div>
+  );
+}
