@@ -1,0 +1,7 @@
+{
+  "name": "rle-backend",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js"
+  }
+}
