@@ -5,134 +5,105 @@ import Metrics from "./components/Metrics";
 import FileDropZone from "./components/FileDropZone";
 import StatusBar from "./components/StatusBar";
 
- import { compressRemote, decompressRemote } from "./services/api";
+import { compressRemote, decompressRemote } from "./services/api";
 
 export default function App() {
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [status, setStatus] = useState("");
-  const [statusKind, setStatusKind] = useState("info");
-  const [timeMs, setTimeMs] = useState(null);
-  const [busy, setBusy] = useState(false);
+const [input, setInput] = useState("");
+const [output, setOutput] = useState("");
+const [status, setStatus] = useState("");
+const [statusKind, setStatusKind] = useState("info");
+const [timeMs, setTimeMs] = useState(null);
+const [busy, setBusy] = useState(false);
 
-  const inputLen = useMemo(() => Array.from(input).length, [input]);
-  const outputLen = useMemo(() => Array.from(output).length, [output]);
+const inputLen = useMemo(() => Array.from(input).length, [input]);
+const outputLen = useMemo(() => Array.from(output).length, [output]);
 
-  const ratio = useMemo(() => {
-    if (inputLen === 0) return NaN;
-    return outputLen / inputLen;
-  }, [inputLen, outputLen]);
+const ratio = useMemo(() => {
+ if (inputLen === 0) return NaN;
+ return outputLen / inputLen;
+}, [inputLen, outputLen]);
 
-  async function runWithTimer(fn) {
-    const t0 = performance.now();
-    const res = await fn();
-    const t1 = performance.now();
-    setTimeMs(t1 - t0);
-    return res;
-  }
+async function runWithTimer(fn) {
+ const t0 = performance.now();
+ const res = await fn();
+ const t1 = performance.now();
+ setTimeMs(t1 - t0);
+ return res;
+}
 
-  async function handleCompress() {
-  setBusy(true);
-  setStatus("");
-  try {
-    const res = await runWithTimer(async () => {
-      return await compressRemote(input);
-    });
+async function handleCompress() {
+ setBusy(true);
+ setStatus("");
+ try {
+   const res = await runWithTimer(async () => {
+     return await compressRemote(input);
+   });
 
-    setOutput(res);
-    setStatus("Compresie reușită.");
-    setStatusKind("success");
-  } catch (e) {
-    setOutput("");
-    setStatus(e.message || "Eroare la compresie.");
-    setStatusKind("error");
-  } finally {
-    setBusy(false);
-  }
+   setOutput(res);
+   setStatus("Compresie reușită.");
+   setStatusKind("success");
+ } catch (e) {
+   setOutput("");
+   setStatus(e.message || "Eroare la compresie.");
+   setStatusKind("error");
+ } finally {
+   setBusy(false);
+ }
 }
 
 async function handleDecompress() {
-  setBusy(true);
-  setStatus("");
-  try {
-    const res = await runWithTimer(async () => {
-      return await decompressRemote(input);
-    });
+ setBusy(true);
+ setStatus("");
+ try {
+   const res = await runWithTimer(async () => {
+     return await decompressRemote(input);
+   });
 
-    setOutput(res);
-    setStatus("Decompresie reușită.");
-    setStatusKind("success");
-  } catch (e) {
-    setOutput("");
-    setStatus(e.message || "Eroare la decompresie.");
-    setStatusKind("error");
-  } finally {
-    setBusy(false);
-  }
+   setOutput(res);
+   setStatus("Decompresie reușită.");
+   setStatusKind("success");
+ } catch (e) {
+   setOutput("");
+   setStatus(e.message || "Eroare la decompresie.");
+   setStatusKind("error");
+ } finally {
+   setBusy(false);
+ }
 }
 
-
-  function handleClear() {
-    setInput("");
-    setOutput("");
-    setStatus("");
-    setTimeMs(null);
-  }
-
-  return (
-    <div className="app">
-      <header className="header">
-        <h1>RLE Text Utility</h1>
-        <p>Compresie / Decompresie Run-Length Encoding</p>
-      </header>
-
-      <FileDropZone onTextLoaded={(text) => setInput(text)} />
-
-      <TextAreas input={input} output={output} onInputChange={setInput} />
-
-      <Controls
-        onCompress={handleCompress}
-        onDecompress={handleDecompress}
-        onClear={handleClear}
-        busy={busy}
-      />
-
-      <Metrics
-        inputLen={inputLen}
-        outputLen={outputLen}
-        ratio={ratio}
-        timeMs={timeMs}
-      />
-
-      <StatusBar status={status} kind={statusKind} />
-    </div>
-  );
+function handleClear() {
+ setInput("");
+ setOutput("");
+ setStatus("");
+ setTimeMs(null);
 }
-    <div className="app">
-      <header className="header">
-        <h1>RLE Text Utility</h1>
-        <p>Compresie / Decompresie Run-Length Encoding</p>
-      </header>
 
-      <FileDropZone onTextLoaded={(text) => setInput(text)} />
+return (
+ <div className="app">
+   <header className="header">
+     <h1>RLE Text Utility</h1>
+     <p>Compresie / Decompresie Run-Length Encoding</p>
+   </header>
 
-      <TextAreas input={input} output={output} onInputChange={setInput} />
+   <FileDropZone onTextLoaded={(text) => setInput(text)} />
 
-      <Controls
-        onCompress={handleCompress}
-        onDecompress={handleDecompress}
-        onClear={handleClear}
-        busy={busy}
-      />
+   <TextAreas input={input} output={output} onInputChange={setInput} />
 
-      <Metrics
-        inputLen={inputLen}
-        outputLen={outputLen}
-        ratio={ratio}
-        timeMs={timeMs}
-      />
+   <Controls
+     onCompress={handleCompress}
+     onDecompress={handleDecompress}
+     onClear={handleClear}
+     busy={busy}
+   />
 
-      <StatusBar status={status} kind={statusKind} />
-    </div>
-  );
+   <Metrics
+     inputLen={inputLen}
+     outputLen={outputLen}
+     ratio={ratio}
+     timeMs={timeMs}
+   />
+
+   <StatusBar status={status} kind={statusKind} />
+ </div>
+);
 }

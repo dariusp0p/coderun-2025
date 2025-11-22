@@ -9,7 +9,6 @@ export function decompress(text) {
     const symbol = chars[i++];
     if (i >= chars.length) throw new Error("Format invalid: missing count");
 
-    // count poate avea mai multe cifre: a12 -> 12
     let numStr = "";
     while (i < chars.length && /^[0-9]$/.test(chars[i])) {
       numStr += chars[i++];
