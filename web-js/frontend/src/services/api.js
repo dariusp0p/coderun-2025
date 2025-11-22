@@ -6,7 +6,7 @@ export async function compressRemote(text) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error("Eroare la compresie (server).");
+  if (!res.ok) throw new Error("Error during compression (server).");
   const data = await res.json();
   return data.result;
 }
@@ -17,7 +17,7 @@ export async function decompressRemote(text) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
   });
-  if (!res.ok) throw new Error("Eroare la decompresie (server).");
+  if (!res.ok) throw new Error("Error during decompression (server).");
   const data = await res.json();
   return data.result;
 }
