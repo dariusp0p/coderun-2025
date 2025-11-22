@@ -1,0 +1,95 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #0b0c10; color: #eee; }
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header h1 { margin: 0 0 4px; }
+.header p { margin: 0; opacity: 0.8; }
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.panel label { display: block; margin-bottom: 6px; font-weight: 600; }
+textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #2e2f36;
+  background: #15161b;
+  color: #eee;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.secondary { background: #2d2f3a; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+}
+.metric {
+  background: #15161b;
+  border: 1px solid #2e2f36;
+  border-radius: 12px;
+  padding: 12px;
+}
+.metric-title { opacity: 0.75; font-size: 13px; margin-bottom: 6px; }
+.metric-val { font-size: 18px; font-weight: 700; }
+
+.status {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.status.info { background: #1f2937; }
+.status.success { background: #064e3b; }
+.status.error { background: #7f1d1d; }
+
+.dropzone {
+  border: 2px dashed #2e2f36;
+  background: #0f1116;
+  padding: 18px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+.dropzone.dragging {
+  border-color: #4f46e5;
+  background: #151827;
+}
+.drop-title { font-weight: 700; }
+.drop-sub { opacity: 0.8; font-size: 14px; margin-top: 4px; }
