@@ -108,3 +108,31 @@ async function handleDecompress() {
     </div>
   );
 }
+    <div className="app">
+      <header className="header">
+        <h1>RLE Text Utility</h1>
+        <p>Compresie / Decompresie Run-Length Encoding</p>
+      </header>
+
+      <FileDropZone onTextLoaded={(text) => setInput(text)} />
+
+      <TextAreas input={input} output={output} onInputChange={setInput} />
+
+      <Controls
+        onCompress={handleCompress}
+        onDecompress={handleDecompress}
+        onClear={handleClear}
+        busy={busy}
+      />
+
+      <Metrics
+        inputLen={inputLen}
+        outputLen={outputLen}
+        ratio={ratio}
+        timeMs={timeMs}
+      />
+
+      <StatusBar status={status} kind={statusKind} />
+    </div>
+  );
+}
