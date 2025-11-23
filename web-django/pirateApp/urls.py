@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, compass, list_hunt_instructions, fetch_and_save_instruction
+from .views import index, compass, list_hunt_instructions, fetch_and_save_instruction, treasure
 
 urlpatterns = [
     path("", index),
@@ -8,4 +8,6 @@ urlpatterns = [
     # rămân utile pentru debug/React
     path("api/hard/list/", list_hunt_instructions),
     path("api/hard/fetch/", fetch_and_save_instruction),
+    path("treasure/", treasure),
+
 ]

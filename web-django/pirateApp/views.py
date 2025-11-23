@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from .models import HuntInstruction
-from .oracle_client import fetch_next_direction, OracleAPIError
+from .models import HuntInstruction, PasswordGuess
+from .oracle_client import fetch_next_direction, OracleAPIError, check_password
 
 
 @require_http_methods(["GET"])
@@ -153,3 +153,61 @@ def fetch_and_save_instruction(request):
             "pictureUrl": obj.image_url,
         }
     })
+
+
+@require_http_methods(["GET", "POST"])
+def treasure(request):
+    """
+    Pagina finală:
+    - 4 inputuri (d1,d2,d3,d4)
+    - GET la oracle /check-password/abcd
+    - salvează fiecare încercare în DB
+    - afișează rezultatul + istoricul încercărilor
+    """
+    context = {
+        "result": None,
+        "error": None,
+        "guesses": PasswordGuess.objects.order_by("-created_at"),
+    }
+
+    if request.method == "POST":
+        d1 = (request.POST.get("d1") or "").strip()
+        d2 = (request.POST.get("d2") or "").strip()
+        d3 = (request.POST.get("d3") or "").strip()
+        d4 = (request.POST.get("d4") or "").strip()
+
+        digits = [d1, d2, d3, d4]
+
+        # validare: exact câte o cifră per input
+        if not all(len(x) == 1 and x.isdigit() for x in digits):
+            context["error"] = "All four fields must be single digits (0-9)."
+            return render(request, "pirateApp/treasure.html", context)
+
+        code = "".join(digits)
+
+        try:
+            data = check_password(code)
+        except OracleAPIError as e:
+            context["error"] = str(e)
+            return render(request, "pirateApp/treasure.html", context)
+
+        # interpretăm răspunsul
+        # presupunere rezonabilă: oracle trimite un mesaj și/sau un flag
+        message = data.get("message") or data.get("instructionText") or str(data)
+        is_correct = bool(data.get("isCorrect") or data.get("correct") or data.get("success"))
+
+        PasswordGuess.objects.create(
+            code=code,
+            is_correct=is_correct,
+            message=message,
+            raw_payload=data,
+        )
+
+        context["result"] = {
+            "code": code,
+            "is_correct": is_correct,
+            "message": message,
+        }
+        context["guesses"] = PasswordGuess.objects.order_by("-created_at")
+
+    return render(request, "pirateApp/treasure.html", context)

@@ -27,3 +27,24 @@ def fetch_next_direction(oracle_id: str, instruction_number: int) -> dict:
         raise OracleAPIError(f"Eroare request către Oracle: {e}")
     except ValueError:
         raise OracleAPIError("Oracle a returnat ceva ce nu e JSON valid")
+
+
+def check_password(code: str) -> dict:
+    """
+    code = "abcd" (4 cifre)
+    Oracle route: check-password/abcd
+    """
+    base = settings.ORACLE_BASE_URL.rstrip("/")
+    url = f"{base}/check-password/{code}"
+
+    try:
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+
+        # uneori oracle poate întoarce text simplu; încercăm json, altfel text
+        try:
+            return r.json()
+        except ValueError:
+            return {"message": r.text}
+    except requests.RequestException as e:
+        raise OracleAPIError(f"Eroare request către Oracle: {e}")

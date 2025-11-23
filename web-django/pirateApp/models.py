@@ -18,3 +18,14 @@ class HuntInstruction(models.Model):
 
     def __str__(self):
         return f"[{self.instruction_id}] {self.title} - {self.distance_nm} nm {self.direction}"
+
+
+class PasswordGuess(models.Model):
+    code = models.CharField(max_length=4)  # ex: "0427"
+    is_correct = models.BooleanField(default=False)
+    message = models.TextField(blank=True)  # ce zice oracle
+    raw_payload = models.JSONField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.code} ({'OK' if self.is_correct else 'NO'})"
