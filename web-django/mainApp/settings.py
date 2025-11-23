@@ -15,7 +15,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ORACLE_BASE_URL = "https://ORACLE_HOST_AICI/"
+ORACLE_BASE_URL = "https://coderum-2025-pirates-baace2h8crd9btg4.canadacentral-01.azurewebsites.net"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
