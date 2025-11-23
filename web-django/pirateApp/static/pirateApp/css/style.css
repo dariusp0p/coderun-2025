@@ -1,0 +1,47 @@
+/* File: pirateApp/static/pirateApp/css/compass.css */
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  min-height: 100vh;
+  margin: 0;
+  background-image: url("/static/pirateApp/images/pirates.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #0f172a;
+}
+
+/* subtle dark overlay so text is readable regardless of image */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.45);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* keep page content above overlay */
+nav, main, .card, .navbar {
+  position: relative;
+  z-index: 1;
+}
+
+/* make cards slightly translucent with soft blur to integrate with background */
+.card {
+  background-color: rgba(255,255,255,0.9);
+  backdrop-filter: saturate(120%) blur(4px);
+}
+
+/* image styling inside cards */
+.card img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  max-height: 160px;
+}
+
+/* responsive tweaks */
+@media (max-width: 767px) {
+  .card img { max-height: 140px; }
+  .navbar-brand { font-size: 1rem; }
+}

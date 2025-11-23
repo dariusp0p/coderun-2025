@@ -4,24 +4,60 @@
   <meta charset="utf-8"/>
   <title>Treasure Chest Lock</title>
   <style>
-    body { font-family: Arial; margin: 30px; background:#f7f7f7; }
-    .box { background:white; padding:20px; border-radius:10px; margin-bottom:20px; }
-    .digits { display:flex; gap:10px; margin:12px 0; }
-    .digits input {
-      width:50px; height:60px; font-size:28px; text-align:center;
-      border-radius:8px; border:1px solid #ccc;
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: url('/static/pirateApp/images/pirates.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
     }
-    .btn { padding:8px 14px; border:none; border-radius:6px; background:#1976d2; color:white; cursor:pointer;}
-    .error { color:#b00020; font-weight:bold; }
-    .ok { color:#1b5e20; font-weight:bold; }
-    .guess { padding:8px 10px; background:#fff; border-radius:8px; margin-bottom:8px; }
+    .box {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+    }
+    .digits {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0;
+      justify-content: center;
+    }
+    .digits input {
+      width: 50px;
+      height: 60px;
+      font-size: 28px;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #1976d2;
+      color: white;
+      cursor: pointer;
+    }
+    .error {
+      color: #ff5252;
+      font-weight: bold;
+    }
+    .ok {
+      color: #4caf50;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-  <h2>🔒 Treasure Chest</h2>
-
   <div class="box">
+    <h2>🔒 Treasure Chest</h2>
     <h3>Enter 4-digit code</h3>
 
     {% if error %}
@@ -46,24 +82,6 @@
         {{ result.message }}
       </p>
     {% endif %}
-  </div>
-
-  <div class="box">
-    <h3>Your guesses</h3>
-
-    {% if not guesses %}
-      <p>No guesses yet.</p>
-    {% endif %}
-
-    {% for g in guesses %}
-      <div class="guess">
-        <b>{{ g.code }}</b>
-        — {% if g.is_correct %}<span class="ok">correct</span>{% else %}<span class="error">wrong</span>{% endif %}
-        <br>
-        <small>{{ g.created_at }}</small>
-        <p>{{ g.message }}</p>
-      </div>
-    {% endfor %}
   </div>
 
 </body>
