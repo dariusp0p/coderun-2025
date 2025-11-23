@@ -24,6 +24,8 @@ def list_hunt_instructions(request):
     ]
     return JsonResponse({"instructions": data})
 
+def index(request):
+    return redirect('/compass/')
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -33,41 +35,59 @@ def fetch_and_save_instruction(request):
     except Exception:
         return JsonResponse({"error": "Body JSON invalid"}, status=400)
 
-    instruction_number = body.get("instruction_number")
-    oracle_id = body.get("oracle_id")
+# Create your views here.
+def compass(request):
+    context = {
+        "instructions": Instruction.objects.order_by("created_at"),
+    }
 
-    if instruction_number is None or oracle_id is None:
-        return JsonResponse(
-            {"error": "Trebuie să trimiți instruction_number și oracle_id"},
-            status=400
-        )
+    if request.method == "POST":
+        last_id_raw = (request.POST.get("last_id") or "").strip()
 
-    try:
-        data = fetch_next_direction(oracle_id, int(instruction_number))
-    except OracleAPIError as e:
-        return JsonResponse({"error": str(e)}, status=400)
+        if not last_id_raw.isdigit():
+            messages.error(request, "Instruction ID must be a positive integer.")
+            return render(request, "pirateApp/compass_hard.html", context)
 
-    obj, _ = HuntInstruction.objects.update_or_create(
-        instruction_id=int(instruction_number),
-        defaults={
-            "title": data.get("title", ""),
-            "direction": data.get("direction", ""),
-            "distance_nm": int(data.get("distanceInMeters", 0)),  # păstrăm metri aici
-            "description": data.get("instructionText", ""),
-            "image_url": data.get("pictureUrl", ""),
-            "raw_payload": data
-        }
-    )
+        last_id = int(last_id_raw)
 
-    return JsonResponse({
-        "saved": True,
-        "next_oracle_id": data.get("nextID"),
-        "instruction": {
-            "instruction_id": obj.instruction_id,
-            "title": obj.title,
-            "direction": obj.direction,
-            "distanceInMeters": obj.distance_nm,
-            "description": obj.description,
-            "pictureUrl": obj.image_url,
-        }
-    })
+        try:
+            data = fetch_next_instruction(last_id)
+
+            # AICI mapezi ce primești de la oracle.
+            # Presupunere rezonabilă de chei; ajustezi după payload-ul real:
+            new_id = int(data["id"])
+            title = data.get("title", f"Instruction {new_id}")
+            direction = data.get("direction", "").lower()
+            distance = int(data.get("distance", 0))
+            description = data.get("description", "")
+            image_url = data.get("image", "") or data.get("image_url", "")
+
+            prev_obj = Instruction.objects.filter(id=last_id).first()
+
+            instr, created = Instruction.objects.update_or_create(
+                id=new_id,
+                defaults={
+                    "title": title,
+                    "direction": direction,
+                    "distance": distance,
+                    "description": description,
+                    "image_url": image_url,
+                    "previous_instruction": prev_obj,
+                }
+            )
+
+            if created:
+                messages.success(request, f"Fetched new instruction #{instr.id}.")
+            else:
+                messages.info(request, f"Instruction #{instr.id} updated.")
+
+        except requests.HTTPError as e:
+            messages.error(request, f"Oracle error: {e.response.status_code}")
+        except requests.RequestException:
+            messages.error(request, "Could not reach the oracle. Try again.")
+        except (KeyError, ValueError, TypeError):
+            messages.error(request, "Oracle returned unexpected data format.")
+
+        context["instructions"] = Instruction.objects.order_by("created_at")
+
+    return render(request, "pirateApp/compass.html", context)

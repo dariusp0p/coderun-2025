@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Django Treasure Hunt — Hard Compass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1">🏴‍☠️ Treasure Hunt Compass (Hard)</span>
+    </div>
+</nav>
+
+<div class="container">
+
+    {% if messages %}
+        <div class="mb-3">
+            {% for m in messages %}
+                <div class="alert alert-{{ m.tags }} mb-2" role="alert">
+                    {{ m }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Set Sail</h5>
+            <p class="text-muted mb-3">
+                Enter the last instruction ID to fetch the next step from the oracle.
+            </p>
+
+            <form method="post" class="row g-2 align-items-end">
+                {% csrf_token %}
+                <div class="col-sm-6 col-md-4">
+                    <label for="last_id" class="form-label">Instruction ID</label>
+                    <input type="number" min="0" class="form-control" id="last_id" name="last_id" placeholder="e.g. 0"
+                           required>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <button class="btn btn-primary w-100" type="submit">
+                        Fetch next direction
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <h5 class="mb-3">Journey Log</h5>
+
+    {% if instructions %}
+        <div class="row g-3">
+            {% for ins in instructions %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if ins.image_url %}
+                            <img src="{{ ins.image_url }}" class="card-img-top" alt="Direction image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                #{{ ins.id }} — {{ ins.title }}
+                            </h6>
+                            <p class="mb-1">
+                                <strong>Direction:</strong> {{ ins.direction }}
+                            </p>
+                            <p class="mb-1">
+                                <strong>Distance:</strong> {{ ins.distance }} nautical miles
+                            </p>
+                            {% if ins.previous_instruction %}
+                                <p class="mb-1 text-muted">
+                                    From #{{ ins.previous_instruction.id }}
+                                </p>
+                            {% endif %}
+                            {% if ins.description %}
+                                <p class="mt-2 small">{{ ins.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">
+            No instructions yet. Start by entering an ID.
+        </div>
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

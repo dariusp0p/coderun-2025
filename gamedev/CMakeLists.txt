@@ -8,7 +8,9 @@ include_directories(${SDL3_INCLUDE_DIRS})
 
 add_executable(
         gamedev
-        test_project/main.cpp
+        game/main.cpp
+        game/circle.h
+        game/circle.cpp
 )
 
 target_include_directories(gamedev PRIVATE include)
