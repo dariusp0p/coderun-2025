@@ -1,11 +1,15 @@
 import requests
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Instruction
 
 ORACLE_BASE = "https://coderum-2025-pirates-baace2h8crd9btg4.canadacentral-01.azurewebsites.net"
 # În PDF zice că vei primi instrucțiuni în timp real despre URL.
 # Păstrează funcția asta și ajustezi path-ul când îl afli.
+
+def index(request):
+    return redirect('/compass/')
+
 def build_oracle_url(last_id: int) -> str:
     # EXEMPLU posibil (NU garantat):
     # return f"{ORACLE_BASE}/direction/set-sail/{last_id}"
