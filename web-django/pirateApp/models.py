@@ -1,35 +1,4 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
-
-class Instruction(models.Model):
-    DIRECTION_CHOICES = [
-        ('east', 'East'),
-        ('west', 'West'),
-        ('south', 'South'),
-        ('north', 'North'),
-        ('north-east', 'North-East'),
-        ('north-west', 'North-West'),
-        ('south-east', 'South-East'),
-        ('south-west', 'South-West'),
-    ]
-
-    direction = models.CharField(max_length=20, choices=DIRECTION_CHOICES)
-    distance_nm = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    description = models.CharField(max_length=255)
-    previous_instruction = models.ForeignKey(
-        'self',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='next_instructions'
-    )
-    risk_level = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.distance_nm} miles {self.direction}"
 
 
 class HuntInstruction(models.Model):
